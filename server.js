@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
+require('dotenv').config();
 
 app.use('/api/status', (req, res) => {
   res.status(200).json('Backend is already good');
