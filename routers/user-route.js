@@ -6,7 +6,11 @@ const {
   getAllUser,
   verifyUser,
 } = require('../services/user-service');
+const checkAuth = require('../middlewares/checkAuth');
 // GET
+router.get('/check/auth', checkAuth, (req, res) => {
+  res.status(HTTPSTATUS.OK.code).json({ message: 'Login Success' });
+});
 router.get('/user', async (req, res) => {
   try {
     const allUser = await getAllUser();
@@ -29,7 +33,10 @@ router.post('/user/auth', async (req, res) => {
   try {
     const { std_id } = req.body;
     await verifyUser(std_id);
-    res.status(HTTPSTATUS.OK.code).json({ message: HTTPSTATUS.OK.message });
+    res
+      .status(HTTPSTATUS.OK.code)
+      .cookie('std_id', std_id, { maxAge: 7 * 24 * 60 * 60 * 1000 })
+      .json({ message: HTTPSTATUS.OK.message });
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }
