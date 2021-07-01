@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const { HTTPSTATUS } = require('../enumeration/httpStatus');
+
 module.exports.saveUser = async (payload) => {
   try {
     const { std_id, name, nickname } = payload;
@@ -20,6 +21,16 @@ module.exports.saveUser = async (payload) => {
       std_id: hashedPassword,
     });
     await saveUser.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.getAllUser = async () => {
+  try {
+    const allUser = await User.find({ role: 'user' });
+    if (!allUser.length) throw HTTPSTATUS.NOT_FOUND;
+    return allUser;
   } catch (err) {
     throw err;
   }
