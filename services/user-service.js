@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
 const { HTTPSTATUS } = require('../enumeration/httpStatus');
 
 module.exports.saveUser = async (payload) => {
@@ -15,10 +14,8 @@ module.exports.saveUser = async (payload) => {
     if (targetUser.length) {
       throw HTTPSTATUS.CONFLICT;
     }
-    const hashedPassword = await bcrypt.hash(std_id, 10);
     const saveUser = new User({
       ...payload,
-      std_id: hashedPassword,
     });
     await saveUser.save();
   } catch (err) {
@@ -29,8 +26,17 @@ module.exports.saveUser = async (payload) => {
 module.exports.getAllUser = async () => {
   try {
     const allUser = await User.find({ role: 'user' });
-    if (!allUser.length) throw HTTPSTATUS.NOT_FOUND;
+    if (allUser.length === 0) throw HTTPSTATUS.NOT_FOUND;
     return allUser;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.verifyUser = async (std_id) => {
+  try {
+    const userInDB = await User.findOne({ std_id: std_id });
+    if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
   } catch (err) {
     throw err;
   }
