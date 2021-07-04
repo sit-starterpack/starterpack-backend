@@ -5,7 +5,6 @@ const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   nickname: {
     type: String,
@@ -15,6 +14,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    dropDups: true,
   },
   role: {
     type: String,

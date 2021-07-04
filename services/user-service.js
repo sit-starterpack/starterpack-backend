@@ -11,7 +11,7 @@ module.exports.saveUser = async (payload) => {
       };
     }
     const targetUser = await User.find({ std_id: std_id });
-    if (targetUser.length) {
+    if (targetUser.length > 0) {
       throw HTTPSTATUS.CONFLICT;
     }
     const saveUser = new User({
@@ -19,6 +19,9 @@ module.exports.saveUser = async (payload) => {
     });
     await saveUser.save();
   } catch (err) {
+    if (err.code === 11000) {
+      throw HTTPSTATUS.CONFLICT;
+    }
     throw err;
   }
 };
