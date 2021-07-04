@@ -3,8 +3,11 @@ services:
   backend:
     build: .
     image: feedback-backend
-    ports:
-      - ${PORT}:${PORT}
     environment:
       - PORT=${PORT}
       - DB_CONNECTION=${DB_CONNECTION}
+      - CORS=${CORS}
+networks:
+  default:
+    external:
+      name: starter-pack
