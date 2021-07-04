@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   std_id: {
     type: String,
     required: true,
+    unique: true,
   },
   role: {
     type: String,

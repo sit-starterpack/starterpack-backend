@@ -10,7 +10,7 @@ module.exports.saveUser = async (payload) => {
         code: HTTPSTATUS.BAD_REQUEST.code,
       };
     }
-    const targetUser = await User.find({ name: name });
+    const targetUser = await User.find({ std_id: std_id });
     if (targetUser.length) {
       throw HTTPSTATUS.CONFLICT;
     }
@@ -33,10 +33,21 @@ module.exports.getAllUser = async () => {
   }
 };
 
-module.exports.verifyUser = async (std_id) => {
+module.exports.findUserByStdId = async (std_id) => {
   try {
     const userInDB = await User.findOne({ std_id: std_id });
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
+    return userInDB;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.findUserById = async (id) => {
+  try {
+    const userInDB = await User.findById(id);
+    if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
+    return userInDB;
   } catch (err) {
     throw err;
   }
