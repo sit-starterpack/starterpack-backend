@@ -7,8 +7,10 @@ const {
   findUserByStdId,
   findUserById,
   deleteUserById,
+  updateUserById,
 } = require('../services/user-service');
 const checkAuth = require('../middlewares/checkAuth');
+const checkRoleAdmin = require('../middlewares/checkRole');
 // GET
 router.get('/check/auth', checkAuth, (req, res) => {
   res.status(HTTPSTATUS.OK.code).json({ user: res.locals.verifiedUser });
@@ -31,7 +33,7 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 // POST
-router.post('/user', async (req, res) => {
+router.post('/user', checkRoleAdmin, async (req, res) => {
   try {
     const { name, std_id, nickname } = req.body;
     await saveUser({ name, std_id, nickname });
@@ -49,11 +51,21 @@ router.post('/user/auth', async (req, res) => {
     res.status(err.code).json({ message: err.message });
   }
 });
-//DELETE
-router.delete('/user/:id', async (req, res) => {
+// PUT
+router.put('/user/:id', checkRoleAdmin, async (req, res) => {
   try {
-    const id = req.params.id;
-    await deleteUserById(id);
+    const _id = req.params.id;
+    const { nickname, name, std_id } = req.body;
+    await updateUserById(_id, { nickname, name, std_id });
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
+//DELETE
+router.delete('/user/:id', checkRoleAdmin, async (req, res) => {
+  try {
+    const _id = req.params.id;
+    await deleteUserById(_id);
     res.status(HTTPSTATUS.OK.code).json({ message: 'Delete success' });
   } catch (err) {
     res.status(err.code).json({ message: err.message });

@@ -63,3 +63,28 @@ module.exports.deleteUserById = async (id) => {
     throw HTTPSTATUS.NOT_FOUND;
   }
 };
+
+module.exports.checkRoleAdmin = async (std_id) => {
+  try {
+    const requestUser = await User.findOne({ std_id: std_id });
+    if (requestUser !== null) {
+      if (requestUser.role === 'admin') {
+        return true;
+      }
+    }
+    throw HTTPSTATUS.FOR_BIDDEN;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.updateUserById = async (id, payload) => {
+  try {
+    await User.findByIdAndUpdate(id, payload);
+  } catch (err) {
+    if (err.code === 11000) {
+      throw HTTPSTATUS.CONFLICT;
+    }
+    throw HTTPSTATUS.NOT_FOUND;
+  }
+};
