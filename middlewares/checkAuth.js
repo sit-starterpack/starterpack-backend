@@ -7,6 +7,11 @@ async function checkAuth(req, res, next) {
       const verifiedUser = await findUserByStdId(token);
       res.locals.verifiedUser = verifiedUser;
       next();
+    } else {
+      throw {
+        code: 403,
+        message: "Can't access token. Please login",
+      };
     }
   } catch (err) {
     res.status(err.code).json({ message: err.message });

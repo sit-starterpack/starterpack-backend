@@ -6,6 +6,7 @@ const {
   getAllUser,
   findUserByStdId,
   findUserById,
+  deleteUserById,
 } = require('../services/user-service');
 const checkAuth = require('../middlewares/checkAuth');
 // GET
@@ -44,6 +45,16 @@ router.post('/user/auth', async (req, res) => {
     const { std_id } = req.body;
     const verifiedUser = await findUserByStdId(std_id);
     res.status(HTTPSTATUS.OK.code).json({ token: verifiedUser.std_id });
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
+//DELETE
+router.delete('/user/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    await deleteUserById(id);
+    res.status(HTTPSTATUS.OK.code).json({ message: 'Delete success' });
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }

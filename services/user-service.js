@@ -55,3 +55,11 @@ module.exports.findUserById = async (id) => {
     throw err;
   }
 };
+
+module.exports.deleteUserById = async (id) => {
+  try {
+    await User.findByIdAndDelete(id);
+  } catch (err) {
+    throw HTTPSTATUS.NOT_FOUND;
+  }
+};
