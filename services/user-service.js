@@ -47,7 +47,7 @@ module.exports.findUserByStdId = async (std_id) => {
 
 module.exports.findUserById = async (id) => {
   try {
-    const userInDB = await User.findById(id);
+    const userInDB = await User.findById(id).populate('feedbacks.feedbackId');
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;
   } catch (err) {
