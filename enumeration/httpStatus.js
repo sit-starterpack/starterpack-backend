@@ -8,6 +8,10 @@ module.exports.HTTPSTATUS = {
     message:
       'The request has succeeded and a new resource has been created as a result',
   },
+  NO_CONTENT: {
+    code: 204,
+    message: 'The request has succeeded but no content to send back',
+  },
   BAD_REQUEST: {
     code: 400,
     message: 'The server could not understand the request',

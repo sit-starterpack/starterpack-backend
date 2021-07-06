@@ -80,7 +80,7 @@ module.exports.checkRoleAdmin = async (std_id) => {
 
 module.exports.updateUserById = async (id, payload) => {
   try {
-    await User.findByIdAndUpdate(id, payload);
+    await User.findByIdAndUpdate(id, { $set: payload });
   } catch (err) {
     if (err.code === 11000) {
       throw HTTPSTATUS.CONFLICT;

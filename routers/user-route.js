@@ -37,7 +37,9 @@ router.post('/user', checkRoleAdmin, async (req, res) => {
   try {
     const { name, std_id, nickname } = req.body;
     await saveUser({ name, std_id, nickname });
-    res.status(HTTPSTATUS.OK.code).json({ message: HTTPSTATUS.OK.message });
+    res
+      .status(HTTPSTATUS.CREATED.code)
+      .json({ message: HTTPSTATUS.CREATED.message });
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }
@@ -55,8 +57,9 @@ router.post('/user/auth', async (req, res) => {
 router.put('/user/:id', checkRoleAdmin, async (req, res) => {
   try {
     const _id = req.params.id;
-    const { nickname, name, std_id } = req.body;
-    await updateUserById(_id, { nickname, name, std_id });
+    const { nickname, name, std_id, role } = req.body;
+    await updateUserById(_id, { nickname, name, std_id, role });
+    res.sendStatus(HTTPSTATUS.NO_CONTENT.code);
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }
@@ -66,7 +69,7 @@ router.delete('/user/:id', checkRoleAdmin, async (req, res) => {
   try {
     const _id = req.params.id;
     await deleteUserById(_id);
-    res.status(HTTPSTATUS.OK.code).json({ message: 'Delete success' });
+    res.sendStatus(HTTPSTATUS.NO_CONTENT.code);
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }
