@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { HTTPSTATUS } = require('../enumeration/httpStatus');
-const { getAllFeedback } = require('../services/feedback-service');
+const {
+  getAllFeedback,
+  saveFeedbackByUserId,
+} = require('../services/feedback-service');
 const checkRole = require('../middlewares/checkRole');
 // GET
 router.get('/feedback', async (req, res) => {
@@ -13,4 +16,16 @@ router.get('/feedback', async (req, res) => {
   }
 });
 
+router.post('/user/:id/feedback', checkRole, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const payload = req.body;
+    await saveFeedbackByUserId(id, payload);
+    res
+      .status(HTTPSTATUS.CREATED.code)
+      .json({ message: HTTPSTATUS.CREATED.message });
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
 module.exports = router;
