@@ -8,6 +8,7 @@ const {
   findUserById,
   deleteUserById,
   updateUserById,
+  getUserByPagination,
 } = require('../services/user-service');
 const checkAuth = require('../middlewares/checkAuth');
 const checkRoleAdmin = require('../middlewares/checkRole');
@@ -17,8 +18,15 @@ router.get('/check/auth', checkAuth, (req, res) => {
 });
 router.get('/user', async (req, res) => {
   try {
-    const allUser = await getAllUser();
-    res.status(HTTPSTATUS.OK.code).json(allUser);
+    let result = null;
+    const { start, end } = req.query;
+    if (start && end) {
+      const startAt = start - 1 < 0 ? 0 : start - 1;
+      result = await getUserByPagination(startAt, end);
+    } else {
+      result = await getAllUser();
+    }
+    res.status(HTTPSTATUS.OK.code).json(result);
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }

@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const { HTTPSTATUS } = require('../enumeration/httpStatus');
-
 module.exports.saveUser = async (payload) => {
   try {
     const { std_id, name, nickname } = payload;
@@ -86,5 +85,15 @@ module.exports.updateUserById = async (id, payload) => {
       throw HTTPSTATUS.CONFLICT;
     }
     throw HTTPSTATUS.NOT_FOUND;
+  }
+};
+
+module.exports.getUserByPagination = async (offset, limit) => {
+  try {
+    const result = await User.paginate({ role: 'user' }, { offset, limit });
+    if (result.docs.length > 0) return result;
+    else throw HTTPSTATUS.NOT_FOUND;
+  } catch (err) {
+    throw err;
   }
 };
