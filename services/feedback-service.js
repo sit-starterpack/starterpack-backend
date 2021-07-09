@@ -30,3 +30,28 @@ module.exports.saveFeedbackByUserId = async (id, payload) => {
     throw err;
   }
 };
+
+module.exports.deleteFeedbackByUserId = async (userId, feedbackId) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          feedbacks: {
+            feedbackId: feedbackId,
+          },
+        },
+      },
+      { multi: true },
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    const feedback = await Feedback.findByIdAndDelete(feedbackId, (err) => {
+      if (err) throw err;
+    });
+    if (!feedback || !user) throw HTTPSTATUS.BAD_REQUEST;
+  } catch (err) {
+    throw err;
+  }
+};
