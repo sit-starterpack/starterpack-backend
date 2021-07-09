@@ -56,3 +56,16 @@ module.exports.deleteFeedbackByUserId = async (userId, feedbackId) => {
     throw err;
   }
 };
+
+module.exports.updateFeedbackById = async (id, payload) => {
+  try {
+    if (Object.keys(payload).length !== 0) {
+      const feedback = await Feedback.findByIdAndUpdate(id, { $set: payload });
+      if (!feedback) throw HTTPSTATUS.NOT_FOUND;
+    } else {
+      throw HTTPSTATUS.BAD_REQUEST;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
