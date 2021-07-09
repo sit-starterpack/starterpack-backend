@@ -15,14 +15,15 @@ module.exports.saveFeedbackByUserId = async (id, payload) => {
     const { day, comment, commentBy } = payload;
     if (day && comment && commentBy) {
       const newFeedback = new Feedback(payload);
-      await newFeedback.save();
-      await User.findByIdAndUpdate(id, {
+      const user = await User.findByIdAndUpdate(id, {
         $push: {
           feedbacks: {
             feedbackId: newFeedback._id,
           },
         },
       });
+      if (!user) throw HTTPSTATUS.NOT_FOUND;
+      await newFeedback.save();
     } else {
       throw HTTPSTATUS.BAD_REQUEST;
     }
