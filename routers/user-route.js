@@ -9,6 +9,7 @@ const {
   deleteUserById,
   updateUserById,
   getUserByPagination,
+  getAllAdmin,
 } = require('../services/user-service');
 const checkAuth = require('../middlewares/checkAuth');
 const checkRoleAdmin = require('../middlewares/checkRole');
@@ -27,6 +28,14 @@ router.get('/user', async (req, res) => {
       result = await getAllUser();
     }
     res.status(HTTPSTATUS.OK.code).json(result);
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
+router.get('/user/admin', async (req, res) => {
+  try {
+    const admin = await getAllAdmin();
+    res.status(HTTPSTATUS.OK.code).json(admin);
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }

@@ -24,7 +24,15 @@ module.exports.saveUser = async (payload) => {
     throw err;
   }
 };
-
+module.exports.getAllAdmin = async () => {
+  try {
+    const allAdmin = await User.find({ role: 'admin' }).select('name nickname');
+    if (allAdmin.length === 0) throw HTTPSTATUS.NOT_FOUND;
+    return allAdmin;
+  } catch (err) {
+    throw err;
+  }
+};
 module.exports.getAllUser = async () => {
   try {
     const allUser = await User.find({ role: 'user' });
