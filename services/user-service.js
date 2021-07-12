@@ -37,7 +37,9 @@ module.exports.getAllUser = async () => {
 
 module.exports.findUserByStdId = async (std_id) => {
   try {
-    const userInDB = await User.findOne({ std_id: std_id });
+    const userInDB = await User.findOne({ std_id: std_id }).select(
+      'name nickname role'
+    );
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;
   } catch (err) {
