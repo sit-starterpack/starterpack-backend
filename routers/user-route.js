@@ -31,6 +31,14 @@ router.get('/user', async (req, res) => {
     res.status(err.code).json({ message: err.message });
   }
 });
+router.get('/user/length', async (req, res) => {
+  try {
+    const users = await getAllUser();
+    res.status(HTTPSTATUS.OK.code).json({ userLength: users.length });
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
 router.get('/user/:id', async (req, res) => {
   try {
     const id = req.params.id;
