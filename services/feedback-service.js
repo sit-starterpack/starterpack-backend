@@ -69,3 +69,14 @@ module.exports.updateFeedbackById = async (id, payload) => {
     throw err;
   }
 };
+
+module.exports.findFeedbackById = async (id) => {
+  try {
+    if (!id) throw HTTPSTATUS.BAD_REQUEST;
+    const feedback = await Feedback.findById(id);
+    if (!feedback) throw HTTPSTATUS.NOT_FOUND;
+    return feedback;
+  } catch (err) {
+    throw err;
+  }
+};

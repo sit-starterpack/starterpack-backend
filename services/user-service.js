@@ -100,7 +100,10 @@ module.exports.updateUserById = async (id, payload) => {
 
 module.exports.getUserByPagination = async (offset, limit) => {
   try {
-    const result = await User.paginate({ role: 'user' }, { offset, limit });
+    const result = await User.paginate(
+      { role: 'user' },
+      { offset, limit, populate: 'feedbacks.feedbackId' }
+    );
     if (result.docs.length > 0) return result;
     else throw HTTPSTATUS.NOT_FOUND;
   } catch (err) {

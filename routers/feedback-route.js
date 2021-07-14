@@ -6,6 +6,7 @@ const {
   saveFeedbackByUserId,
   deleteFeedbackByUserId,
   updateFeedbackById,
+  findFeedbackById,
 } = require('../services/feedback-service');
 const checkRole = require('../middlewares/checkRole');
 // GET
@@ -13,6 +14,15 @@ router.get('/feedback', async (req, res) => {
   try {
     const allFeedback = await getAllFeedback();
     res.status(HTTPSTATUS.OK.code).json(allFeedback);
+  } catch (err) {
+    res.status(err.code).json({ message: err.message });
+  }
+});
+router.get('/feedback/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const feedback = await findFeedbackById(id);
+    res.status(HTTPSTATUS.OK.code).json(feedback);
   } catch (err) {
     res.status(err.code).json({ message: err.message });
   }
