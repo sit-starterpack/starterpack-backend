@@ -2,8 +2,8 @@ const User = require('../models/User');
 const { HTTPSTATUS } = require('../enumeration/httpStatus');
 module.exports.saveUser = async (payload) => {
   try {
-    const { std_id, name, nickname } = payload;
-    if (!name || !nickname || !std_id) {
+    const { std_id } = payload;
+    if (!std_id) {
       throw {
         message: 'Information invalid or empty',
         code: HTTPSTATUS.BAD_REQUEST.code,
@@ -46,7 +46,7 @@ module.exports.getAllUser = async () => {
 module.exports.findUserByStdId = async (std_id) => {
   try {
     const userInDB = await User.findOne({ std_id: std_id }).select(
-      'name nickname role std_id'
+      'role std_id'
     );
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;

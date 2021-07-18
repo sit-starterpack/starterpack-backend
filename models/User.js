@@ -4,13 +4,9 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: true,
-    unique: true,
-    dropDups: true,
   },
   nickname: {
     type: String,
-    required: true,
   },
   std_id: {
     type: String,

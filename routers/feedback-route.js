@@ -62,7 +62,7 @@ router.delete(
       const userId = req.params.userId;
       const feedbackId = req.params.feedbackId;
       await deleteFeedbackByUserId(userId, feedbackId);
-      res.status(HTTPSTATUS.NO_CONTENT.code);
+      res.sendStatus(HTTPSTATUS.NO_CONTENT.code);
     } catch (err) {
       res.status(err.code).json({ message: err.message });
     }

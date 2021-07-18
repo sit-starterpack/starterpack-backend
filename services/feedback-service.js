@@ -48,10 +48,8 @@ module.exports.deleteFeedbackByUserId = async (userId, feedbackId) => {
         if (err) throw err;
       }
     );
-    const feedback = await Feedback.findByIdAndDelete(feedbackId, (err) => {
-      if (err) throw err;
-    });
-    if (!feedback || !user) throw HTTPSTATUS.BAD_REQUEST;
+    if (!user) throw HTTPSTATUS.BAD_REQUEST;
+    await Feedback.findByIdAndDelete(feedbackId);
   } catch (err) {
     throw err;
   }

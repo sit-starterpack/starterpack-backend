@@ -60,8 +60,8 @@ router.get('/user/:id', async (req, res) => {
 // POST
 router.post('/user', checkRoleAdmin, async (req, res) => {
   try {
-    const { name, std_id, nickname, role } = req.body;
-    await saveUser({ name, std_id, nickname, role });
+    const { std_id, role } = req.body;
+    await saveUser({ std_id, role });
     res
       .status(HTTPSTATUS.CREATED.code)
       .json({ message: HTTPSTATUS.CREATED.message });
