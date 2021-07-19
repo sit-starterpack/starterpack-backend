@@ -46,7 +46,7 @@ module.exports.getAllUser = async () => {
 module.exports.findUserByStdId = async (std_id) => {
   try {
     const userInDB = await User.findOne({ std_id: std_id }).select(
-      'role std_id'
+      'role std_id nickname name'
     );
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;
