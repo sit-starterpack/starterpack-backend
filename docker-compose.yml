@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  backend:
+    build: .
+    image: feedback-backend
+    environment:
+      - PORT=${PORT}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - CORS=${CORS}
+networks:
+  default:
+    external:
+      name: starter-pack
