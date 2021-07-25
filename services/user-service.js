@@ -1,11 +1,11 @@
-const User = require('../models/User');
-const { HTTPSTATUS } = require('../enumeration/httpStatus');
+const User = require("../models/User");
+const { HTTPSTATUS } = require("../enumeration/httpStatus");
 module.exports.saveUser = async (payload) => {
   try {
     const { std_id, name, nickname } = payload;
     if (!name || !nickname || !std_id) {
       throw {
-        message: 'Information invalid or empty',
+        message: "Information invalid or empty",
         code: HTTPSTATUS.BAD_REQUEST.code,
       };
     }
@@ -26,7 +26,7 @@ module.exports.saveUser = async (payload) => {
 };
 module.exports.getAllAdmin = async () => {
   try {
-    const allAdmin = await User.find({ role: 'admin' }).select('name nickname');
+    const allAdmin = await User.find({ role: "admin" }).select("name nickname");
     if (allAdmin.length === 0) throw HTTPSTATUS.NOT_FOUND;
     return allAdmin;
   } catch (err) {
@@ -35,7 +35,7 @@ module.exports.getAllAdmin = async () => {
 };
 module.exports.getAllUser = async () => {
   try {
-    const allUser = await User.find({ role: 'user' });
+    const allUser = await User.find({ role: "user" });
     if (allUser.length === 0) throw HTTPSTATUS.NOT_FOUND;
     return allUser;
   } catch (err) {
@@ -46,7 +46,7 @@ module.exports.getAllUser = async () => {
 module.exports.findUserByStdId = async (std_id) => {
   try {
     const userInDB = await User.findOne({ std_id: std_id }).select(
-      'name nickname role std_id'
+      "name nickname role std_id"
     );
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;
@@ -57,7 +57,7 @@ module.exports.findUserByStdId = async (std_id) => {
 
 module.exports.findUserById = async (id) => {
   try {
-    const userInDB = await User.findById(id).populate('feedbacks.feedbackId');
+    const userInDB = await User.findById(id).populate("feedbacks.feedbackId");
     if (!userInDB) throw HTTPSTATUS.NOT_FOUND;
     return userInDB;
   } catch (err) {
@@ -77,7 +77,7 @@ module.exports.checkRoleAdmin = async (std_id) => {
   try {
     const requestUser = await User.findOne({ std_id: std_id });
     if (requestUser !== null) {
-      if (requestUser.role === 'admin') {
+      if (requestUser.role === "admin") {
         return true;
       }
     }
@@ -101,8 +101,13 @@ module.exports.updateUserById = async (id, payload) => {
 module.exports.getUserByPagination = async (offset, limit) => {
   try {
     const result = await User.paginate(
-      { role: 'user' },
-      { offset, limit, populate: 'feedbacks.feedbackId' }
+      { role: "user" },
+      {
+        offset,
+        limit,
+        populate: "feedbacks.feedbackId",
+        sort: { std_id: "asc" },
+      }
     );
     if (result.docs.length > 0) return result;
     else throw HTTPSTATUS.NOT_FOUND;
